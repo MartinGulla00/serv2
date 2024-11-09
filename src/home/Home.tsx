@@ -1,4 +1,6 @@
+import { Link } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient';
+import { ROUTES } from '../router/routes';
 
 export const Home = () => {
   const handleLogout = () => {
@@ -11,6 +13,7 @@ export const Home = () => {
         <div className="col-start-2">Welcome</div>
         <button onClick={handleLogout}>Logout</button>
       </div>
+      <Link to={ROUTES.CREATE_POST}>Create post</Link>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTES } from './routes';
-import { LoginAndSignUp } from '../Auth/LoginAndSignUp';
+import { LoginAndSignUp } from '../auth/LoginAndSignUp';
 import { useEffect, useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { Session } from '@supabase/supabase-js';
