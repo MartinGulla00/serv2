@@ -15,7 +15,7 @@ export const TextInput = ({
   ) => void;
   value: string;
   label: string;
-  type: 'text' | 'text-area';
+  type?: 'text' | 'text-area';
   placeholder: string;
   className?: string;
   required?: boolean;

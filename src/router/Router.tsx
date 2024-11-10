@@ -7,22 +7,51 @@ import { Session } from '@supabase/supabase-js';
 import { Home } from '../home/Home';
 import { CreatePost } from '../posts/CreatePost';
 import { Posts } from '../posts/Posts';
+import { ProfileInterface } from '../types';
+import { FinishSignup } from '../auth/FinishSignup';
 
 export const Router = () => {
   const [session, setSession] = useState<null | Session>(null);
+  const [profile, setProfile] = useState<null | ProfileInterface>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setLoading(false);
+      if (session) {
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .then(({ data }) => {
+            if (data && data.length > 0) {
+              setProfile(data[0]);
+            }
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
-      setLoading(false);
+      if (session) {
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .then(({ data }) => {
+            if (data && data.length > 0) {
+              setProfile(data[0]);
+            }
+            setLoading(false);
+          });
+      } else {
+        setLoading(false);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -38,6 +67,17 @@ export const Router = () => {
         <Routes>
           <Route path={ROUTES.LOGIN_AND_SIGNUP} element={<LoginAndSignUp />} />
           <Route path="*" element={<Navigate to={ROUTES.LOGIN_AND_SIGNUP} />} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path={ROUTES.FINISH_SIGNUP} element={<FinishSignup />} />
+          <Route path="*" element={<Navigate to={ROUTES.FINISH_SIGNUP} />} />
         </Routes>
       </BrowserRouter>
     );

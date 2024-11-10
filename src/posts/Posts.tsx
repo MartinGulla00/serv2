@@ -16,6 +16,7 @@ export const Posts = () => {
         .select(
           `
             *,
+            profile: profile_id ( id, username, avatar_url ),
             comments_count: comments ( id ),
             likes_count: likes ( id )
           `
@@ -43,7 +44,7 @@ export const Posts = () => {
       {!isLoading && posts.length === 0 && <p>No posts found</p>}
       {!isLoading && posts.length > 0 && (
         <>
-          <div className="w-full flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-1/2">
             {posts.map((post) => (
               <Post key={post.id} post={post} />
             ))}
