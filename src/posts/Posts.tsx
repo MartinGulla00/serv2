@@ -40,21 +40,23 @@ export const Posts = () => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <h1 className="text-2xl font-bold">Posts</h1>
       {!isLoading && posts.length === 0 && <p>No posts found</p>}
       {!isLoading && posts.length > 0 && (
         <>
-          <div className="flex flex-col gap-4 w-1/2">
+          <div className="flex flex-col gap-4 w-full">
             {posts.map((post) => (
               <Post key={post.id} post={post} />
             ))}
           </div>
           {!isLoading && lastCallReturnedData ? (
-            <button onClick={() => setPage((prev) => prev + 1)}>
+            <button
+              className="mt-4"
+              onClick={() => setPage((prev) => prev + 1)}
+            >
               Load more
             </button>
           ) : (
-            <p>No more posts to load</p>
+            <p className="mt-4">No more posts to load</p>
           )}
         </>
       )}

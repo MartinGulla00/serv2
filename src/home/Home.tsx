@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient';
 import { ROUTES } from '../router/routes';
+import { Posts } from '../posts/Posts';
 
 export const Home = () => {
   const handleLogout = () => {
@@ -8,13 +9,29 @@ export const Home = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-full grid grid-cols-3 gap-4 text-center">
-        <div className="col-start-2">Welcome</div>
-        <button onClick={handleLogout}>Logout</button>
+    <div className="w-full grid grid-cols-4 gap-4 text-center overflow-hidden">
+      <div className="flex flex-col gap-4 h-screen overflow-hidden">
+        <Link to={ROUTES.CREATE_POST}>Create post</Link>
+        <input type="text" placeholder="Search" />
+        <div className="flex flex-col overflow-scroll">
+          <div>persona 1</div>
+          <div>persona 2</div>
+          <div>persona 3</div>
+          <div>persona 4</div>
+        </div>
       </div>
-      <Link to={ROUTES.POSTS}>See all posts</Link>
-      <Link to={ROUTES.CREATE_POST}>Create post</Link>
+      <div className="flex flex-col w-full h-[90%] col-span-2 overflow-scroll">
+        <Posts />
+      </div>
+      <div className="flex gap-4 ">
+        <div>my profile</div>
+        <button
+          onClick={handleLogout}
+          className="flex flex-col self-start items-center"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 };

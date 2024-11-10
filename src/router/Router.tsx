@@ -6,7 +6,6 @@ import { supabase } from '../supabase/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 import { Home } from '../home/Home';
 import { CreatePost } from '../posts/CreatePost';
-import { Posts } from '../posts/Posts';
 import { ProfileInterface } from '../types';
 import { FinishSignup } from '../auth/FinishSignup';
 
@@ -88,7 +87,6 @@ export const Router = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
         <Route path={ROUTES.CREATE_POST} element={<CreatePost />} />
-        <Route path={ROUTES.POSTS} element={<Posts />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
       </Routes>
     </BrowserRouter>
