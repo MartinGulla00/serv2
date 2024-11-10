@@ -7,6 +7,7 @@ import { TextInput } from '../inputs/TextInput';
 import { supabase } from '../supabase/supabaseClient';
 import { useQueryClient } from '@tanstack/react-query';
 import { Comment } from './Comment';
+import { twMerge } from 'tailwind-merge';
 
 export const Post = ({ post }: { post: PostInterface }) => {
   const [seeComments, setSeeComments] = useState(false);
@@ -38,6 +39,26 @@ export const Post = ({ post }: { post: PostInterface }) => {
     await queryClient.invalidateQueries({ queryKey: ['posts'] });
   };
 
+  const hasLikeFromUser = post.likes?.some(
+    (like) => like.profile_id === profile?.id
+  );
+
+  const toggleLike = async () => {
+    if (hasLikeFromUser) {
+      await supabase
+        .from('likes')
+        .delete()
+        .eq('post_id', post.id)
+        .eq('profile_id', profile?.id);
+    } else {
+      await supabase
+        .from('likes')
+        .insert({ post_id: post.id, profile_id: profile?.id });
+    }
+
+    await queryClient.invalidateQueries({ queryKey: ['posts'] });
+  };
+
   return (
     <div className="border-2 border-gray-300 rounded-lg flex flex-col">
       <div className="flex gap-2 p-2 items-center">
@@ -55,10 +76,14 @@ export const Post = ({ post }: { post: PostInterface }) => {
       />
       <div className="p-2 flex flex-col">
         <div className="flex w-full gap-4">
-          <div className="flex gap-2">
-            <LikeIcon />
+          <button className="flex gap-2" onClick={toggleLike}>
+            <LikeIcon
+              className={twMerge(
+                hasLikeFromUser && 'text-red-500 stroke-red-500'
+              )}
+            />
             <span>{post.likes?.length ?? 0}</span>
-          </div>
+          </button>
           <div
             className="flex gap-2"
             onClick={() => setSeeComments((prev) => !prev)}

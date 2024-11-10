@@ -9,7 +9,6 @@ export interface CommentInterface {
 
 export interface LikesInterface {
   id: string;
-  post_id: string;
   profile_id: string;
 }
 

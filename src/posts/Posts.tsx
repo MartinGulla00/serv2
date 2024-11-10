@@ -18,7 +18,7 @@ export const Posts = () => {
             *,
             profile: profile_id ( id, username, avatar_url),
             comments (id, profile: profiles ( username, avatar_url ), content, created_at),
-            likes_count: likes ( id )
+            likes: likes ( id, profile_id )
           `
         )
         .order('created_at', { ascending: false })
