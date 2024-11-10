@@ -16,8 +16,8 @@ export const Posts = () => {
         .select(
           `
             *,
-            profile: profile_id ( id, username, avatar_url ),
-            comments_count: comments ( id ),
+            profile: profile_id ( id, username, avatar_url),
+            comments (id, profile: profiles ( username, avatar_url ), content, created_at),
             likes_count: likes ( id )
           `
         )
