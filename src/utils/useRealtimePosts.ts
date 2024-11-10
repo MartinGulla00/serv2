@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { PostInterface } from '../types';
 
-function useRealtimePosts() {
+function useRealtimePosts(profileId?: string) {
   const [posts, setPosts] = useState<PostInterface[]>([]);
 
-  // Función para cargar los posts inicialmente
   const fetchPosts = async () => {
     const { data, error } = await supabase
       .from('posts')
@@ -17,7 +16,8 @@ function useRealtimePosts() {
         likes: likes (id, profile_id)
       `
       )
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .eq(profileId ? 'profile_id' : "", profileId || "")
 
     if (error) console.error('Error fetching posts:', error);
     else setPosts(data);
