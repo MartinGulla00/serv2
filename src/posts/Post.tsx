@@ -5,7 +5,6 @@ import { CommentIcon } from '../icons/CommentIcon';
 import { formatTimeForPost } from '../utils/formatDate';
 import { TextInput } from '../inputs/TextInput';
 import { supabase } from '../supabase/supabaseClient';
-import { useQueryClient } from '@tanstack/react-query';
 import { Comment } from './Comment';
 import { twMerge } from 'tailwind-merge';
 import { ProfileBadge } from '../profiles/ProfileBadge';
@@ -32,14 +31,15 @@ export const Post = ({ post }: { post: PostInterface }) => {
         });
     });
   }, []);
-  const queryClient = useQueryClient();
   const handleCreateComment = async () => {
     await supabase.from('comments').insert({
       post_id: post.id,
       content: commentContent,
       profile_id: profile?.id,
     });
-    await queryClient.invalidateQueries({ queryKey: ['posts'] });
+
+    setCreateComment(false);
+    setCommentContent('');
   };
 
   const hasLikeFromUser = post.likes?.some(
@@ -58,8 +58,6 @@ export const Post = ({ post }: { post: PostInterface }) => {
         .from('likes')
         .insert({ post_id: post.id, profile_id: profile?.id });
     }
-
-    await queryClient.invalidateQueries({ queryKey: ['posts'] });
   };
 
   return (
@@ -72,7 +70,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
         src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/${post.image_url}`}
         alt={post.description}
       />
-      <div className="p-2 flex flex-col">
+      <div className="p-2 flex flex-col items-start">
         <div className="flex w-full gap-4">
           <button className="flex gap-2" onClick={toggleLike}>
             <LikeIcon
@@ -115,11 +113,12 @@ export const Post = ({ post }: { post: PostInterface }) => {
           </div>
         )}
         {createComment ? (
-          <div className="flex gap-4 mt-2">
+          <div className="grid grid-cols-8 gap-4 mt-2 w-full">
             <TextInput
               onChange={(e) => setCommentContent(e.target.value)}
               value={commentContent}
               placeholder="Add a comment"
+              className='col-span-6'
             />
             <button type="button" onClick={handleCreateComment}>
               Submit
