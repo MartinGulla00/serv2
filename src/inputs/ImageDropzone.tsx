@@ -44,8 +44,12 @@ const ImageDropzone = ({
     >
       <input {...getInputProps()} id="image" />
       {image ? (
-        <div className='flex w-full h-full'>
-          <img src={URL.createObjectURL(image)} alt="preview" className="w-full" />
+        <div className="flex w-full h-full">
+          <img
+            src={URL.createObjectURL(image)}
+            alt="preview"
+            className="w-full"
+          />
         </div>
       ) : (
         <div>

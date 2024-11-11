@@ -31,6 +31,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
         });
     });
   }, []);
+
   const handleCreateComment = async () => {
     await supabase.from('comments').insert({
       post_id: post.id,
@@ -60,11 +61,25 @@ export const Post = ({ post }: { post: PostInterface }) => {
     }
   };
 
+  const handleDelete = async () => {
+    await supabase.from('posts').delete().eq('id', post.id);
+  };
+
   return (
     <div className="border-2 border-gray-300 rounded-lg flex flex-col">
-      <div className="flex gap-2 p-2 items-center">
-        <ProfileBadge profile={post.profile} />
-        <p>- {formatTimeForPost(post.created_at)}</p>
+      <div className="flex gap-2 p-2 items-center justify-between w-full">
+        <div className="flex gap-2 items-center">
+          <ProfileBadge profile={post.profile} />
+          <p>- {formatTimeForPost(post.created_at)}</p>
+        </div>
+        {profile?.id == post.profile?.id && (
+          <button
+            className="bg-red-500 py-2 px-4 rounded-xl"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        )}
       </div>
       <img
         src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/${post.image_url}`}
@@ -118,7 +133,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
               onChange={(e) => setCommentContent(e.target.value)}
               value={commentContent}
               placeholder="Add a comment"
-              className='col-span-6'
+              className="col-span-6"
             />
             <button type="button" onClick={handleCreateComment}>
               Submit

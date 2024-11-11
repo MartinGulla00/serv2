@@ -104,7 +104,12 @@ export const CreatePost = () => {
             />
           </div>
         </div>
-        <button className='flex border rounded-lg items-center justify-center h-12 m-2' onClick={handleCreatePost}>Create Post</button>
+        <button
+          className="flex border rounded-lg items-center justify-center h-12 m-2"
+          onClick={handleCreatePost}
+        >
+          Create Post
+        </button>
       </div>
       <div className="grid grid-cols-2 gap-4">
         <button
