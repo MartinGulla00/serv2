@@ -8,6 +8,7 @@ import { Home } from '../home/Home';
 import { CreatePost } from '../posts/CreatePost';
 import { ProfileInterface } from '../types';
 import { FinishSignup } from '../auth/FinishSignup';
+import { Profile } from '../profiles/Profile';
 
 export const Router = () => {
   const [session, setSession] = useState<null | Session>(null);
@@ -87,6 +88,7 @@ export const Router = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
         <Route path={ROUTES.CREATE_POST} element={<CreatePost />} />
+        <Route path={ROUTES.PROFILE} element={<Profile />} />
         <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
       </Routes>
     </BrowserRouter>

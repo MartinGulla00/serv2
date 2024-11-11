@@ -8,8 +8,11 @@ import { supabase } from '../supabase/supabaseClient';
 import { useQueryClient } from '@tanstack/react-query';
 import { Comment } from './Comment';
 import { twMerge } from 'tailwind-merge';
+import { ProfileBadge } from '../profiles/ProfileBadge';
+import { Like } from './Like';
 
 export const Post = ({ post }: { post: PostInterface }) => {
+  const [seeLikes, setSeeLikes] = useState(false);
   const [seeComments, setSeeComments] = useState(false);
   const [createComment, setCreateComment] = useState(false);
   const [commentContent, setCommentContent] = useState('');
@@ -40,7 +43,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
   };
 
   const hasLikeFromUser = post.likes?.some(
-    (like) => like.profile_id === profile?.id
+    (like) => like.profile?.id === profile?.id
   );
 
   const toggleLike = async () => {
@@ -62,12 +65,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
   return (
     <div className="border-2 border-gray-300 rounded-lg flex flex-col">
       <div className="flex gap-2 p-2 items-center">
-        <img
-          src={`${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/${post.profile?.avatar_url}`}
-          alt={post.profile?.username}
-          className="h-8 w-8 rounded-full"
-        />
-        <div>{post.profile?.username}</div>
+        <ProfileBadge profile={post.profile} />
         <p>- {formatTimeForPost(post.created_at)}</p>
       </div>
       <img
@@ -92,15 +90,25 @@ export const Post = ({ post }: { post: PostInterface }) => {
             <span>{post.comments?.length ?? 0}</span>
           </div>
         </div>
-        <div className="flex">
-          <div className="font-bold">{post.profile?.username}</div>
+        <div className="flex items-center">
+          <ProfileBadge profile={post.profile} />
           <div>{`: ${post.description}`}</div>
         </div>
+        <button onClick={() => setSeeLikes((prev) => !prev)}>
+          {seeLikes ? 'Hide' : 'See'} likes
+        </button>
+        {seeLikes && (
+          <div className="flex flex-col gap-2">
+            <div>Likes:</div>
+            {post.likes?.map((like) => <Like key={like.id} like={like} />)}
+          </div>
+        )}
         <button onClick={() => setSeeComments((prev) => !prev)}>
           {seeComments ? 'Hide' : 'See'} comments
         </button>
         {seeComments && (
-          <div>
+          <div className="flex flex-col gap-2">
+            <div>Comments:</div>
             {post.comments?.map((comment) => (
               <Comment key={comment.id} comment={comment} />
             ))}

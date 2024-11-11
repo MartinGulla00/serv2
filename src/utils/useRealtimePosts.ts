@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { PostInterface } from '../types';
 
-function useRealtimePosts(profileId?: string) {
+function useRealtimePosts() {
   const [posts, setPosts] = useState<PostInterface[]>([]);
 
   const fetchPosts = async () => {
@@ -11,13 +11,12 @@ function useRealtimePosts(profileId?: string) {
       .select(
         `
         *,
-        profile: profile_id (id, username, avatar_url),
-        comments (id, profile: profiles (username, avatar_url), content, created_at),
-        likes: likes (id, profile_id)
+        profile: profile_id (id, username, avatar_url, user_id, full_name),
+        comments (id, profile: profiles (id, username, avatar_url, user_id, full_name), content, created_at),
+        likes (id, profile: profiles (id, username, avatar_url, user_id, full_name))
       `
       )
-      .order('created_at', { ascending: false })
-      .eq(profileId ? 'profile_id' : "", profileId || "")
+      .order('created_at', { ascending: false });
 
     if (error) console.error('Error fetching posts:', error);
     else setPosts(data);
@@ -33,30 +32,20 @@ function useRealtimePosts(profileId?: string) {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'posts' },
-        (payload) => {
-          console.log('Post change:', payload);
-          fetchPosts(); // Vuelve a cargar los posts cuando haya un cambio
-        }
+        fetchPosts
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'comments' },
-        (payload) => {
-          console.log('Comment change:', payload);
-          fetchPosts(); // Vuelve a cargar los posts cuando haya un cambio en comments
-        }
+        fetchPosts
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'likes' },
-        (payload) => {
-          console.log('Like change:', payload);
-          fetchPosts(); // Vuelve a cargar los posts cuando haya un cambio en likes
-        }
+        fetchPosts
       )
       .subscribe();
 
-    // Limpia la suscripción al desmontar el componente
     return () => {
       supabase.removeChannel(postsSubscription);
     };

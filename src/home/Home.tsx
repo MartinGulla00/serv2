@@ -1,12 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient';
 import { ROUTES } from '../router/routes';
 import { Posts } from '../posts/Posts';
+import { useState } from 'react';
 
 export const Home = () => {
   const handleLogout = () => {
     supabase.auth.signOut();
   };
+  const [userId, setUserId] = useState<string | null>(null);
+  supabase.auth.getUser().then(({ data }) => {
+    if (data.user) {
+      setUserId(data.user.id);
+    }
+  });
+
+  const navigate = useNavigate();
 
   return (
     <div className="w-full grid grid-cols-4 gap-4 text-center overflow-hidden">
@@ -24,7 +33,13 @@ export const Home = () => {
         <Posts />
       </div>
       <div className="flex gap-4 ">
-        <div>my profile</div>
+        <button
+          onClick={() =>
+            navigate(ROUTES.PROFILE.replace(':userid', userId ?? ''))
+          }
+        >
+          My profile
+        </button>
         <button
           onClick={handleLogout}
           className="flex flex-col self-start items-center"

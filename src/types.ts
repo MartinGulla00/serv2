@@ -10,6 +10,7 @@ export interface CommentInterface {
 export interface LikesInterface {
   id: string;
   profile_id: string;
+  profile?: ProfileInterface;
 }
 
 export interface PostInterface {
@@ -25,8 +26,8 @@ export interface PostInterface {
 
 export interface ProfileInterface {
   id: string;
-  email: string;
   username: string;
   avatar_url: string;
   full_name: string;
+  user_id: string;
 }
