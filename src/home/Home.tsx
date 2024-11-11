@@ -1,8 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabase/supabaseClient';
 import { ROUTES } from '../router/routes';
 import { Posts } from '../posts/Posts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { SearchProfile } from '../profiles/SearchProfile';
+import { ProfileBadge } from '../profiles/ProfileBadge';
+import { ProfileInterface } from '../types';
 
 export const Home = () => {
   const handleLogout = () => {
@@ -15,34 +18,56 @@ export const Home = () => {
     }
   });
 
+  const [profile, setProfile] = useState<ProfileInterface>();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      supabase
+        .from('profiles')
+        .select('*')
+        .eq('user_id', data?.user?.id)
+        .then(({ data }) => {
+          if (data && data.length > 0) {
+            setProfile(data[0]);
+          }
+        });
+    });
+  }, []);
+
   const navigate = useNavigate();
 
   return (
     <div className="w-full grid grid-cols-4 gap-4 text-center overflow-hidden">
       <div className="flex flex-col gap-4 h-screen overflow-hidden">
-        <Link to={ROUTES.CREATE_POST}>Create post</Link>
-        <input type="text" placeholder="Search" />
-        <div className="flex flex-col overflow-scroll">
-          <div>persona 1</div>
-          <div>persona 2</div>
-          <div>persona 3</div>
-          <div>persona 4</div>
+        <button
+          className="flex border rounded-xl items-center justify-center h-12"
+          type="button"
+          onClick={() => navigate(ROUTES.CREATE_POST)}
+        >
+          Create post
+        </button>
+        <SearchProfile />
+      </div>
+      <div className="flex flex-col w-full h-[95%] col-span-2 overflow-hidden">
+        <div className="flex items-center gap-2 justify-center p-3 font-semibold text-2xl">
+          All posts
+        </div>
+        <div className="flex flex-col w-full h-full overflow-scroll">
+          <Posts />
         </div>
       </div>
-      <div className="flex flex-col w-full h-[90%] col-span-2 overflow-scroll">
-        <Posts />
-      </div>
-      <div className="flex gap-4 ">
+      <div className="grid grid-cols-2 gap-4">
         <button
+          className="flex self-start items-center h-12 rounded-xl border justify-center"
           onClick={() =>
             navigate(ROUTES.PROFILE.replace(':userid', userId ?? ''))
           }
         >
-          My profile
+          {profile ? <ProfileBadge profile={profile} /> : 'Profile'}
         </button>
         <button
           onClick={handleLogout}
-          className="flex flex-col self-start items-center"
+          className="flex self-start items-center h-12 rounded-xl border justify-center"
         >
           Logout
         </button>

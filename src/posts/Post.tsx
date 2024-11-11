@@ -90,7 +90,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
             <span>{post.comments?.length ?? 0}</span>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center mt-2">
           <ProfileBadge profile={post.profile} />
           <div>{`: ${post.description}`}</div>
         </div>
@@ -98,7 +98,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
           {seeLikes ? 'Hide' : 'See'} likes
         </button>
         {seeLikes && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <div>Likes:</div>
             {post.likes?.map((like) => <Like key={like.id} like={like} />)}
           </div>
@@ -107,7 +107,7 @@ export const Post = ({ post }: { post: PostInterface }) => {
           {seeComments ? 'Hide' : 'See'} comments
         </button>
         {seeComments && (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col">
             <div>Comments:</div>
             {post.comments?.map((comment) => (
               <Comment key={comment.id} comment={comment} />
