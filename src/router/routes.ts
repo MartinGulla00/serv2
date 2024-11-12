@@ -4,4 +4,5 @@ export const ROUTES = {
   CREATE_POST: '/create-post',
   FINISH_SIGNUP: '/finish-signup',
   PROFILE: '/profile/:userid',
+  FORGOT: '/forgot',
 } as const;

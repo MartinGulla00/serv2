@@ -9,6 +9,7 @@ import { CreatePost } from '../posts/CreatePost';
 import { ProfileInterface } from '../types';
 import { FinishSignup } from '../auth/FinishSignup';
 import { Profile } from '../profiles/Profile';
+import { ForgotPassword } from '../profiles/ForgotPassword';
 
 export const Router = () => {
   const [session, setSession] = useState<null | Session>(null);
@@ -78,6 +79,17 @@ export const Router = () => {
         <Routes>
           <Route path={ROUTES.FINISH_SIGNUP} element={<FinishSignup />} />
           <Route path="*" element={<Navigate to={ROUTES.FINISH_SIGNUP} />} />
+        </Routes>
+      </BrowserRouter>
+    );
+  }
+
+  if (session.user.recovery_sent_at) {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path={ROUTES.FORGOT} element={<ForgotPassword />} />
+          <Route path="*" element={<Navigate to={ROUTES.FORGOT} />} />
         </Routes>
       </BrowserRouter>
     );
