@@ -7,6 +7,8 @@ import { Posts } from '../posts/Posts';
 import { ProfileBadge } from './ProfileBadge';
 import { ROUTES } from '../router/routes';
 import { SearchProfile } from './SearchProfile';
+import { LikeIcon } from '../icons/LikeIcon';
+import { CommentIcon } from '../icons/CommentIcon';
 
 export const Profile = () => {
   const { userid } = useParams<{ userid: string }>();
@@ -54,6 +56,15 @@ export const Profile = () => {
   };
   const navigate = useNavigate();
 
+  const totalLikes = posts.reduce(
+    (acc, post) => acc + (post.likes?.length ?? 0),
+    0
+  );
+  const totalComments = posts.reduce(
+    (acc, post) => acc + (post.comments?.length ?? 0),
+    0
+  );
+
   return (
     <div className="w-full grid grid-cols-4 gap-4 text-center overflow-hidden">
       <div className="flex flex-col gap-4 h-screen overflow-hidden">
@@ -71,6 +82,16 @@ export const Profile = () => {
           <ProfileBadge profile={profile} />
           <div>-</div>
           <div>{profile?.full_name}</div>
+          <div>-</div>
+          <div className="flex gap-2 items-center">
+            <LikeIcon />
+            {totalLikes}
+          </div>
+          <div>-</div>
+          <div className="flex gap-2 items-center">
+            <CommentIcon />
+            {totalComments}
+          </div>
         </div>
         <div className="flex flex-col w-full h-full overflow-scroll">
           <Posts profilePosts={posts} />
