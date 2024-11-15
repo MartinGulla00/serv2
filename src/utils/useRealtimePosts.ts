@@ -16,7 +16,8 @@ function useRealtimePosts() {
         likes (id, profile: profiles (id, username, avatar_url, user_id, full_name))
       `
       )
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .eq('approved', true);
 
     if (error) console.error('Error fetching posts:', error);
     else setPosts(data);

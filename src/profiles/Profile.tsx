@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ProfileInterface } from '../types';
-import useRealtimePosts from '../utils/useRealTimePosts';
+import useRealtimePosts from '../utils/useRealtimePosts';
 import { supabase } from '../supabase/supabaseClient';
 import { Posts } from '../posts/Posts';
 import { ProfileBadge } from './ProfileBadge';
