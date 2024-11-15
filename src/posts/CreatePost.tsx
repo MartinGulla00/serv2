@@ -9,11 +9,13 @@ import { ProfileBadge } from '../profiles/ProfileBadge';
 import { LikeIcon } from '../icons/LikeIcon';
 import { CommentIcon } from '../icons/CommentIcon';
 import { twMerge } from 'tailwind-merge';
+import { format } from 'date-fns';
 
 export const CreatePost = () => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [profile, setProfile] = useState<ProfileInterface>();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -30,12 +32,15 @@ export const CreatePost = () => {
   }, []);
 
   const handleCreatePost = async () => {
+    setLoading(true);
     if (!image) {
       alert('Please upload an image');
+      setLoading(false);
       return;
     }
     if (!description) {
       alert('Please enter a description');
+      setLoading(false);
       return;
     }
     const randomName = Math.random().toString(36).substring(6);
@@ -47,9 +52,22 @@ export const CreatePost = () => {
         image_url: `posts/${randomName}`,
         profile_id: profile?.id,
       })
-      .then(() => {
-        setDescription('');
-        setImage(null);
+      .select('id')
+      .then(async ({ data }) => {
+        const postId = data ? data[0]?.id : '';
+
+        const createdAt = format(new Date(), 'dd-MM-yyyy');
+        const body = {
+          username: profile?.username,
+          createdAt,
+          description,
+          imageUrl: `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/images/posts/${randomName}`,
+          postId: `${postId}`,
+        };
+        await supabase.functions.invoke('notify-post', {
+          body,
+        });
+        setLoading(false);
         navigate(ROUTES.HOME);
       });
   };
@@ -105,7 +123,8 @@ export const CreatePost = () => {
           </div>
         </div>
         <button
-          className="flex border rounded-lg items-center justify-center h-12 m-2"
+          disabled={loading}
+          className="flex border rounded-lg items-center justify-center h-12 m-2 disabled:opacity-50"
           onClick={handleCreatePost}
         >
           Create Post
