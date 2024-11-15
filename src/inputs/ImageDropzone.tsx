@@ -38,18 +38,14 @@ const ImageDropzone = ({
     <div
       {...getRootProps()}
       className={twMerge(
-        'flex items-center justify-center border-2 border-gray-300 rounded-lg w-fit h-fit cursor-pointer p-4',
+        'flex items-center justify-center rounded-lg cursor-pointer w-full h-full',
         className
       )}
     >
       <input {...getInputProps()} id="image" />
       {image ? (
-        <div>
-          <img
-            src={URL.createObjectURL(image)}
-            alt="preview"
-            className="max-h-96"
-          />
+        <div className='flex w-full h-full'>
+          <img src={URL.createObjectURL(image)} alt="preview" className="w-full" />
         </div>
       ) : (
         <div>
