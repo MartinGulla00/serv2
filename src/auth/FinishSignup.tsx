@@ -59,6 +59,7 @@ export const FinishSignup = () => {
           onImageUpload={(file) => setAvatar(file)}
           setError={() => {}}
           image={avatar}
+          className="border-2 border-gray-300 p-4 w-fit"
         />
         <button type="button" onClick={handleCreateProfile}>
           Finish Sign Up
