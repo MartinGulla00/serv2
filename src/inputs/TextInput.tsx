@@ -14,7 +14,7 @@ export const TextInput = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
   value: string;
-  label: string;
+  label?: string;
   type?: 'text' | 'text-area';
   placeholder: string;
   className?: string;
@@ -23,9 +23,11 @@ export const TextInput = ({
 }) => {
   return (
     <div className={twMerge('flex flex-col w-full', className)}>
-      <label htmlFor={name} className="text-sm font-bold">
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={name} className="text-sm font-bold">
+          {label}
+        </label>
+      )}
       {type == 'text' ? (
         <input
           type={type}

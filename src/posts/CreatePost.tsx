@@ -41,8 +41,7 @@ export const CreatePost = () => {
         image_url: `posts/${randomName}`,
         profile_id: profile?.id,
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         setDescription('');
         setImage(null);
       });

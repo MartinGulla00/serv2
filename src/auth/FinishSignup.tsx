@@ -35,7 +35,6 @@ export const FinishSignup = () => {
       avatar_url: `profiles/${randomName}`,
     };
 
-    console.log(info);
     await supabase.from('profiles').insert(info);
 
     navigate(ROUTES.HOME);
