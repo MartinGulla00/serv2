@@ -13,6 +13,7 @@ export const Home = () => {
         <div className="col-start-2">Welcome</div>
         <button onClick={handleLogout}>Logout</button>
       </div>
+      <Link to={ROUTES.POSTS}>See all posts</Link>
       <Link to={ROUTES.CREATE_POST}>Create post</Link>
     </div>
   );

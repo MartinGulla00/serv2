@@ -6,7 +6,7 @@ const ImageDropzone = ({
   onImageUpload,
   setError,
   className,
-  image
+  image,
 }: {
   onImageUpload: (file: File) => void;
   setError: (error: string) => void;
@@ -43,13 +43,19 @@ const ImageDropzone = ({
       )}
     >
       <input {...getInputProps()} id="image" />
-      {image ? 
-      <div>
-        <img src={URL.createObjectURL(image)} alt="preview" className="max-h-96" />
-      </div>
-      :<div>
-        <p>Drag and drop an image here, or click to select an image</p>
-      </div>}
+      {image ? (
+        <div>
+          <img
+            src={URL.createObjectURL(image)}
+            alt="preview"
+            className="max-h-96"
+          />
+        </div>
+      ) : (
+        <div>
+          <p>Drag and drop an image here, or click to select an image</p>
+        </div>
+      )}
     </div>
   );
 };
