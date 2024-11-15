@@ -1,5 +1,5 @@
 import { Post } from './Post';
-import useRealtimePosts from '../utils/useRealTimePosts';
+import useRealtimePosts from '../utils/useRealtimePosts';
 import { PostInterface } from '../types';
 
 export const Posts = ({ profilePosts }: { profilePosts?: PostInterface[] }) => {
