@@ -1,5 +1,5 @@
 export const ROUTES = {
   HOME: '/',
   LOGIN_AND_SIGNUP: '/login-and-signup',
-  DASHBOARD: '/dashboard',
+  CREATE_POST: '/create-post',
 } as const;

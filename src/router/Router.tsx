@@ -1,26 +1,35 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTES } from './routes';
-import { LoginAndSignUp } from '../Auth/LoginAndSignUp';
+import { LoginAndSignUp } from '../auth/LoginAndSignUp';
 import { useEffect, useState } from 'react';
 import { supabase } from '../supabase/supabaseClient';
 import { Session } from '@supabase/supabase-js';
+import { Home } from '../home/Home';
+import { CreatePost } from '../posts/CreatePost';
 
 export const Router = () => {
-  const [session, setSession] = useState<null|Session>(null)
+  const [session, setSession] = useState<null | Session>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-    })
+      setSession(session);
+      setLoading(false);
+    });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session)
-    })
+      setSession(session);
+      setLoading(false);
+    });
 
-    return () => subscription.unsubscribe()
-  }, [])
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!session) {
     return (
@@ -36,8 +45,9 @@ export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={ROUTES.HOME} element={<div>estoy log</div>} />
-        <Route path="*" element={<Navigate to={ROUTES.HOME}/>} />
+        <Route path={ROUTES.HOME} element={<Home />} />
+        <Route path={ROUTES.CREATE_POST} element={<CreatePost />} />
+        <Route path="*" element={<Navigate to={ROUTES.HOME} />} />
       </Routes>
     </BrowserRouter>
   );
